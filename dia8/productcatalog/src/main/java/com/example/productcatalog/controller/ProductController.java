@@ -2,6 +2,7 @@ package com.example.productcatalog.controller;
 
 import com.example.productcatalog.model.Product;
 import com.example.productcatalog.service.ProductService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -41,5 +42,11 @@ public class ProductController {
     public String findProduct(@PathVariable int id) {
         Product foundProduct = productService.findProduct(id);
         return "Product with id "+ id + ": \n"+ foundProduct;
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String HandleValidationException(IllegalArgumentException exception) {
+        return exception.getMessage();
     }
 }

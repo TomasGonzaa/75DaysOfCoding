@@ -14,7 +14,8 @@ public class ProductService {
     private List<Product> productList = new ArrayList<>();
 
     public void addProduct(Product product) {
-        Product product1 = new Product(product.getId(),product.getName(),product.getPrice());
+        Product product1 = new Product(product.getId(),product.getName().toLowerCase(),product.getPrice());
+        validateProduct(product1);
         productList.add(product1);
     }
 
@@ -22,7 +23,17 @@ public class ProductService {
         return productList;
     }
 
+    public void validateProduct(Product product){
+        if (product.getName().isEmpty() || product.getName() == null) {
+            throw new IllegalArgumentException("Product name must not be empty");
+        }
+        if (product.getPrice() < 0) {
+            throw new IllegalArgumentException("Product price must be 0 or higher");
+        }
+    }
+
     public Product updateProduct(int idProduct, Product updatedProduct) {
+        validateProduct(updatedProduct);
         for (int i = 0; i <= productList.size() ; i++) {
             Product current = productList.get(i);
             if (current.getId() == idProduct) {
